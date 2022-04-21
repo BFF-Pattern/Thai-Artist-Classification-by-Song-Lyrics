@@ -1,6 +1,6 @@
 # Pattern_BFF
  
-2110573 Pattern_Recognition
+2110573 Pattern_Recognition\
 Computer Engineering, Chulalongkorn University
 
 ML Project: Thai Artist Classification by Song Lyrics
