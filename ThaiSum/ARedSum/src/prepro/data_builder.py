@@ -22,6 +22,7 @@ from prepro.utils import _get_word_ngrams
 def load_json(p, lower):
     source = []
     tgt = []
+    # tgt = ""
     flag = False
     for sent in json.load(open(p))['sentences']:
         tokens = [t['word'] for t in sent['tokens']]
@@ -37,7 +38,7 @@ def load_json(p, lower):
             source.append(tokens)
 
     source = [clean(' '.join(sent)).split() for sent in source]
-    tgt = [clean(' '.join(sent)).split() for sent in tgt]
+    tgt = [clean(' '.join(sent)).split() for sent in tgt] #Comment
     return source, tgt
 
 
