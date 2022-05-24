@@ -19,29 +19,6 @@ from others.utils import clean
 from prepro.utils import _get_word_ngrams
 
 
-def load_json(p, lower):
-    print('load_json',p)
-    source = []
-    tgt = []
-    flag = False
-    for sent in json.load(open(p))['sentences']:
-        tokens = [t['word'] for t in sent['tokens']]
-        if (lower):
-            tokens = [t.lower() for t in tokens]
-        if (tokens[0] == '@highlight'):
-            flag = True
-            continue
-        if (flag):
-            tgt.append(tokens)
-            flag = False
-        else:
-            source.append(tokens)
-
-    source = [clean(' '.join(sent)).split() for sent in source]
-    tgt = [clean(' '.join(sent)).split() for sent in tgt]
-    return source, tgt
-
-
 def cal_rouge(evaluated_ngrams, reference_ngrams):
     reference_count = len(reference_ngrams)
     evaluated_count = len(evaluated_ngrams)
@@ -77,15 +54,13 @@ class BertData():
         self.cls_vid = self.tokenizer.vocab['[CLS]']
         self.pad_vid = self.tokenizer.vocab['[PAD]']
 
-    def preprocess(self, src, tgt):
+    def preprocess(self, src):
 
         if (len(src) == 0):
             return None
 
         original_src_txt = [' '.join(s) for s in src]
         #array of joined sentences
-
-        labels = [1] * len(src)
         # for l in oracle_ids:
         #     labels[l] = 1
 
@@ -93,21 +68,22 @@ class BertData():
         #filter out the sentences shorter than 5 words and cutoff sentences with words over 200
 
         src = [src[i][:self.args.max_src_ntokens] for i in idxs]
-        labels = [labels[i] for i in idxs]
+        #labels = [labels[i] for i in idxs]
         src = src[:self.args.max_nsents]
-        labels = labels[:self.args.max_nsents]
+        #labels = labels[:self.args.max_nsents]
         #only keep the first 100 sentences.
 
         if (len(src) < self.args.min_nsents):
             return None
-        if (len(labels) == 0):
-            return None
+        # if (len(labels) == 0):
+        #     return None
 
         src_txt = [' '.join(sent) for sent in src]
         # text = [' '.join(ex['src_txt'][i].split()[:self.args.max_src_ntokens]) for i in idxs]
         # text = [_clean(t) for t in text]
         text = ' [SEP] [CLS] '.join(src_txt) #cut CLS
         src_subtokens = self.tokenizer.tokenize(text)
+        while len(src_subtokens) < 510: src_subtokens += src_subtokens
         src_subtokens = src_subtokens[:510]
         src_subtokens = ['[CLS]'] + src_subtokens + ['[SEP]']
 
@@ -122,14 +98,13 @@ class BertData():
             else:
                 segments_ids += s * [1]
         cls_ids = [i for i, t in enumerate(src_subtoken_idxs) if t == self.cls_vid]
-        labels = labels[:len(cls_ids)]
+        #labels = labels[:len(cls_ids)]
         #print(len(src_subtoken_idxs))
         #print(len(cls_ids), len(segments_ids))
         #print(len(labels))
 
-        tgt_txt = tgt
         src_txt = [original_src_txt[i] for i in idxs]
-        return src_subtoken_idxs, labels, segments_ids, cls_ids, src_txt, tgt_txt
+        return src_subtoken_idxs, segments_ids, cls_ids, src_txt
 
 
 def format_to_bert(args):
@@ -193,13 +168,13 @@ def _format_to_bert(params):
     jobs = json.load(open(json_file))
     datasets = []
     for d in jobs:
-        song_id, source, tgt = d['songId'], d['src'], d['tgt']
-        b_data = bert.preprocess(source, tgt)
+        song_id, source, label = d['songId'], d['lyric'], d['label']
+        b_data = bert.preprocess(source)
         if (b_data is None):
             continue
-        indexed_tokens, labels, segments_ids, cls_ids, src_txt, tgt_txt = b_data
-        b_data_dict = {"song_id":song_id, "src": indexed_tokens, "labels": labels, "segs": segments_ids, 'clss': cls_ids,
-                       'src_txt': src_txt, "tgt_txt": tgt_txt}
+        indexed_tokens, segments_ids, cls_ids, src_txt = b_data
+        b_data_dict = {"song_id":song_id, "src": indexed_tokens, "labels": label, "segs": segments_ids, 'clss': cls_ids,
+                       'src_txt': src_txt}
         datasets.append(b_data_dict)
     logger.info('Saving to %s' % save_file)
     torch.save(datasets, save_file)

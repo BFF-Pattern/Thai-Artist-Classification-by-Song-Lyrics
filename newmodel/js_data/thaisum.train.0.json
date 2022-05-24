@@ -1,6 +1,6 @@
 [
     {
-        "src": [
+        "lyric": [
             [
                 "หากว่า",
                 "มี",
@@ -320,10 +320,11 @@
             ]
         ],
         "songId": 0,
-        "tgt": "lemon_soup"
+        "artist": "1mill",
+        "label": 0
     },
     {
-        "src": [
+        "lyric": [
             [
                 "อยาก",
                 "เจอ",
@@ -665,6 +666,7 @@
             ]
         ],
         "songId": 1,
-        "tgt": "mook_worranit"
+        "artist": "1mill",
+        "label": 0
     }
 ]
