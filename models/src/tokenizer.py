@@ -30,7 +30,7 @@ p_stemmer = PorterStemmer()
 # from pythainlp.ulmfit import process_thai
 
 
-def clean_special_marks(text, verbose=0, special_marks=cfg.SPECIAL_MARK_NAME):
+def clean(text, verbose=0, special_marks=cfg.SPECIAL_MARK_NAME):
 
     mark_count = {}
 
@@ -59,7 +59,7 @@ def split_word(text, allow_stemming=['english']):
 
     # Thai
     if 'thai' in allow_stemming:
-        tokens_temp=[]
+        tokens_temp = []
         for i in tokens:
             w_syn = wordnet.synsets(i)
             if (len(w_syn)>0) and (len(w_syn[0].lemma_names('tha'))>0):

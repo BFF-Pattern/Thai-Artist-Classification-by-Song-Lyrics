@@ -4,10 +4,7 @@ Computer Engineering, Chulalongkorn University
 
 ### order to run notebooks:
 
-1. scrape_thai.ipynb
-2. data_preparation.ipynb
-3. feature_extraction.ipynb
-4. prediction.ipynb
+-- In Progess --
 
 ### REF:
 - https://www.kaggle.com/reisel/classification-of-artist-by-song-lyrics

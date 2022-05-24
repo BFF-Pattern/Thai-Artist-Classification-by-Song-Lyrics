@@ -1,7 +1,10 @@
 import os, sys
-from models.src.ordered_easydict import OrderedEasyDict as edict
 import numpy as np
 import torch
+
+# import util fuctions here
+
+from models.src.ordered_easydict import OrderedEasyDict as edict
 
 __C = edict()
 cfg = __C
@@ -40,6 +43,7 @@ __C.SPECIAL_MARK = {'round_brackets' : r'\((.*?)\)',
                     'ampersand' : r'\&',
                     'underscore' : r'\_',
                     'r"\(|\)"' :  r'\(|\)'}
+
 
 __C.ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname('__file__'), '..', '..'))
 __C.DATA_BASE_PATH = os.path.join(__C.ROOT_DIR, 'data_lyrics')
