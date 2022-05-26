@@ -30,19 +30,19 @@ p_stemmer = PorterStemmer()
 # from pythainlp.ulmfit import process_thai
 
 
-def clean(text, special_marks=cfg.SPECIAL_MARK_NAME, verbose=0):
+def clean(song_df_lyrics, special_marks=cfg.SPECIAL_MARK, verbose=0):
 
     mark_count = {}
 
     for name, mark in tqdm(special_marks.items()):
-        mark_count[name] = sum(list(text.map(lambda s: re.findall(mark, s))), [])
-        text = text.map(lambda s: re.sub(mark, '', s))
+        mark_count[name] = sum(list(song_df_lyrics.map(lambda s: re.findall(mark, s))), [])
+        song_df_lyrics = song_df_lyrics.map(lambda s: re.sub(mark, '', s))
     
     if (verbose==1):
         for name, count in mark_count.items():
             print(f'Number of {name}: {count}')
         
-    return text
+    return song_df_lyrics
 
 
 def split_word(text, allow_stemming=['english']):
@@ -74,4 +74,4 @@ def split_word(text, allow_stemming=['english']):
     # ลบช่องว่าง
     tokens = [i for i in tokens if not ' ' in i]
 
-    return 
+    return tokens

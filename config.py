@@ -53,6 +53,8 @@ __C.SPECIAL_MARK = {'round_brackets' : r'\((.*?)\)',
                     'dollar_sign' : r'\$',
                     'ampersand' : r'\&',
                     'underscore' : r'\_',
-                    'r"\(|\)"' :  r'\(|\)'}
+                    'r"\(|\)"' :  r'\(|\)',
+                    'r\[' :  r'\[',
+                    'r\]' :  r'\]'}
 
 
