@@ -19,8 +19,8 @@ import warnings
 
 # import util fuctions here
 
-from models.src.config import cfg
-from models.src.tokenizer import split_word
+from config import cfg
+from utils.tokenizer import split_word
 
 
 def get_model() -> Word2VecKeyedVectors:

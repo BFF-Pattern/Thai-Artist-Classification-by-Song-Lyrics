@@ -20,7 +20,7 @@ from tqdm import tqdm
 
 # import util fuctions here
 
-from models.src.config import cfg
+from config import cfg
 
 
 nltk.download('words')
