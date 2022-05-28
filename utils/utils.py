@@ -29,6 +29,20 @@ en_stop = tuple(get_stop_words('en'))
 p_stemmer = PorterStemmer()
 # from pythainlp.ulmfit import process_thai
 
+def read_lyrics(lyrics_path):
+    # TH LYRICS PATH : cfg.TH_DATA_LYRICS
+    # ENG LYRICS PATH : cfg.ENG_DATA_LYRICS
+    all_files = glob.glob(lyrics_path)
+
+    song_list = []
+
+    for filename in all_files:
+        song_df = pd.read_csv(filename, index_col=None, header=0)
+        song_list.append(song_df)
+
+    song_df = pd.concat(song_list, axis=0, ignore_index=True)
+
+    return song_df
 
 def clean(song_df_lyrics, special_marks=cfg.SPECIAL_MARK, verbose=0):
 
